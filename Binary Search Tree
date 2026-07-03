@@ -1,0 +1,80 @@
+You are given a Binary Search Tree (BST) and a value X. Your task is to delete the node with value X from the BST while maintaining the BST property.
+
+Deletion rules:
+
+If the node is a leaf node → Simply remove it.
+
+If the node has only one child → Replace the node with its child.
+
+If the node has two children → Replace the node’s value with its inorder successor (smallest value in right subtree), then delete that successor node.
+
+After deleting the node, print the inorder traversal of the updated BST.
+answer
+import java.io.*;
+import java.util.*;
+class Node{
+    int data;
+    Node left,right;
+    Node(int val)
+    {
+        data=val;
+        left=right=null;
+    }
+}
+
+public class Solution {
+    static Node insert(Node root,int val)
+    {
+        if(root==null) return new Node(val);
+        else if(root.data>val) root.left=insert(root.left, val);
+        else root.right=insert(root.right, val);
+        return root;
+    }
+    static Node min(Node root)
+    {
+        while(root.left!=null) root=root.left;
+        return root;
+    }
+    static Node delete(Node root,int k)
+    {
+        if(root==null) return null;
+        else if(root.data>k) root.left=delete(root.left, k);
+        else if(root.data<k) root.right=delete(root.right, k);
+        else {
+            if(root.left==null && root.right==null) return null;
+            else if(root.left==null) return root.right;
+            else if(root.right==null) return root.left;
+            else{
+                Node find=min(root.right);
+                root.data=find.data;
+                root.right=delete(root.right, find.data);
+            }
+            
+        }
+        return root;
+    }
+    static void inorder(Node root)
+    {
+        if(root==null) return;
+        inorder(root.left);
+        System.out.print(root.data+" ");
+        inorder(root.right);
+    }
+
+    public static void main(String[] args) {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
+        Scanner sc=new Scanner(System.in);
+        int n=sc.nextInt();
+        int []a=new int[n];
+        for(int i=0;i<n;i++) a[i]=sc.nextInt();
+        int k=sc.nextInt();
+        Node root=new Node(a[0]);
+        for(int i=1;i<n;i++)
+        {
+            insert(root,a[i]);
+        }
+       root= delete(root, k);
+       inorder(root);
+       
+    }
+}
