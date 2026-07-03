@@ -1,0 +1,62 @@
+Given a binary tree, calculate the sum of all leaf node values. A leaf node has no left or right child.
+
+ANSWER
+import java.io.*;
+import java.util.*;
+
+public class Solution {
+    static int leaf(Node root)
+    {
+        
+       if(root==null) return 0;
+       int c=(root.left==null && root.right==null)?root.data:0;
+       return c+leaf(root.left)+leaf(root.right);
+        
+       }
+      
+       
+        
+       
+        
+        
+    
+
+    public static void main(String[] args) {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
+        Queue <Node> q=new LinkedList<>();
+        Scanner sc=new Scanner(System.in);
+        int n=sc.nextInt();
+        int []a=new int[n];
+        for(int i=0;i<n;i++) a[i]=sc.nextInt();
+        Node root=new Node(a[0]);
+        q.offer(root);
+        for(int i=1;i<n;i++)
+        {
+            Node t=q.poll();
+            if(a[i]!=-1)
+            {
+                Node l=new Node(a[i]);
+                t.left=l;
+                q.offer(l);
+            }
+            if(++i<n && a[i]!=-1)
+            {
+                Node r=new Node(a[i]);
+                t.right=r;
+                q.offer(r);
+            }
+        }
+        System.out.print(leaf(root));
+    }
+}
+class Node
+{
+    int data;
+    Node left,right;
+    Node (int val)
+    {
+        data=val;
+        left=right=null;
+        
+    }
+}
